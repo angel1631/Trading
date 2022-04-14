@@ -10,12 +10,12 @@ function ContextProvider(props){
         dialect: process.env.DB_DIALECT
     });
 
-    try {
-        await sequelize.authenticate();
-        console.log('Coneccion con Base de datos. Ok');
-    } catch (error) {
-        console.error('Error al conectarse con la DB:', error);
-    }
+    
+        sequelize.authenticate().then((ok)=>{
+            console.log('Coneccion con Base de datos. Ok');
+        }).catch((error)=>{
+            console.error('Error al conectarse con la DB:', error);
+        });
 
     const Coin = sequelize.define('Coin', {
         name: DataTypes.STRING,
