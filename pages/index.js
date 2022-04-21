@@ -1,6 +1,5 @@
-import Home from '../components/Home'; 
-import Coin from './Coin';
+import Home from '../components/Home';
 
 export default ()=>{
-    return (<div className='w-full'><Coin/></div>)
+    return (<div className='w-full'><Home/></div>)
 }

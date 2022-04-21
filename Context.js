@@ -1,9 +1,8 @@
 import React from "react";
-import mysql from "mysql2";
 
 const Context = React.createContext();
 
-function ContextProvider(props){
+export const getServerSideProps = async (params)=>{
     let connection = mysql.createConnection({
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
@@ -14,11 +13,19 @@ function ContextProvider(props){
         if (err) {
           return console.error('error: ' + err.message);
         }
-      
         console.log('Connected to the MySQL server.');
       });
-    let states = {orm:{models:[Coin]}};
-    //let states = {};
+    //let states = {orm:{models:[Coin]}};
+    
+    return {
+        props: {
+
+        }
+    }
+}
+
+function ContextProvider(props){
+    let states = {};
     return (
         <Context.Provider value={{
             states

@@ -1,17 +1,27 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { FaLine } from "react-icons/fa";
 import { AutoComplete } from "./AutoComplete";
+import { GenericField } from "./GenericField";
 
 function GenericForm({title="Formulario", children, fields, url_enviar, function_send, state_show_form, form_state}){
     
     let [form,setForm] = form_state;
+    useEffect(()=>{
+        fields.map(async (field,index)=>{
+            if(field.type=='select' && field.list.url){
+                const url = field.list.url;
+                let res_api = await fetch(`${url}`);
+                res_api = await res_api.json()
+                fields[index].list.options = res_api.data;
+            }
+        })
+    },[]);
     let change_input = ({e, id, value})=>{
         let new_value = {...form};
-        
         new_value[id] = value; 
         setForm(new_value);
     }
-    function send_form({e, url_enviar}){
+    async function send_form({e, url_enviar}){
         try{
             e.preventDefault();
             let new_item = {};
@@ -20,9 +30,23 @@ function GenericForm({title="Formulario", children, fields, url_enviar, function
                 else {new_item[field.id] = form[field.id];}
                 return true;
             });
-            function_send(new_item);
-            clear_form();
-            
+            if(url_enviar){
+                let response = await fetch(url_enviar, {
+                    method: "POST",
+                    body: JSON.stringify(new_item),
+                });
+                if(response.status==404 || response.status==500) throw "El api al que desea enviar el formulario no existe o no esta disponible";
+                let respuesta_json = await response.json();
+                if(response.status==200){
+                    alert(respuesta_json.data);
+                    clear_form();
+                }else{
+                    alert(`Error 1: ${respuesta_json.error.message}`);
+                }  
+            }else{
+                function_send(new_item);
+                clear_form();
+            }
         }catch(error){
             alert(error);
             console.log("------------error", error);
@@ -49,42 +73,7 @@ function GenericForm({title="Formulario", children, fields, url_enviar, function
                 {
                     fields.map(field=>(
                         <div className={(field.depende && form[field.depende]==false) && 'hidden' || 'form-line'} key={field.id}>
-                            {field.type=='radio' ? 
-                                field.options.map((option,index)=>(
-                                    <label key={index}>
-                                        <input type="radio" name={field.id} value={option.value} 
-                                            onChange={(e)=>change_input({e, id:field.id})}
-                                        /> {option.show}
-                                    </label>
-                                ))
-                            :
-                                field.type=='switch' ?
-                                <div className="form-check form-switch pl-1 py-2 flex ">
-                                    <label className=" text-gray-800" htmlFor="flexSwitchCheckDefault">{field.description}</label>
-                                    <input className="form-check-input appearance-none w-9 ml-2 rounded-full h-5 
-                                                        align-top bg-gray-400 bg-no-repeat bg-contain text-zinc-800 focus:outline-none cursor-pointer shadow-sm" 
-                                            type="checkbox" checked={form[field.id]} role="switch" onChange={(e)=>change_input({e, id:field.id, value: e.target.checked})}/>
-                                    
-                                </div>
-                            :
-                                field.type=='select' ?
-                                <div className="form-check form-switch pl-1 py-2 flex ">
-                                    <label className=" text-gray-800" htmlFor="flexSwitchCheckDefault">{field.description}</label>
-                                    <select value={form[field.id]} onChange={(e)=>change_input({e, id:field.id, value: e.target.value})}>
-                                        {field.list.map(el=>(<option value={el.id}>{el.name}</option>))}
-                                    </select>
-                                    
-                                </div>
-                            :
-                                <input className="w-full rounded-lg shadow-md p-2 mb-2" placeholder={field.description} 
-                                    style={field.invisible && {display: "none"}} 
-                                    type={field.type} value={form[field.id]} 
-                                    onBlur={(e)=>{
-                                        if(field.onBlur)
-                                        field.onBlur(e);
-                                    }} 
-                                    onChange={(e)=>change_input({e, id:field.id, value:e.target.value})} />
-                            }
+                            <GenericField field={field} state={form[field.id]} onChange={change_input} />
                             {field.autoComplete && <AutoComplete list={field.autoComplete} form_state={form_state} id={field.id}/>}
                         </div>
                     ))

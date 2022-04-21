@@ -4,7 +4,10 @@ function useStateForm({fields}){
     fields.map(field=>{
         let id = field.id;
         let def = '';
-        if(field.def) def = field.def;
+        if(field.def){
+            if(typeof(field.def)=='function') def = field.def();
+            else def = field.def;
+        } 
         array_fields[id]= def;
     });
     let [state, setState] = useState(array_fields);
