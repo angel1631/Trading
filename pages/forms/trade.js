@@ -14,11 +14,12 @@ let fields = [
         {id: 'fecha', type:'date', description: 'Fecha del trade', def: ()=>{let now = new Date(); now = getDateShort(now); return now}},
 ];
 let fields_display=[
-    {col: 'trade', wid:'1/5'},
-    {col: 'name', wid:'1/5'},
-    {col: 'symbol', wid:'1/5'},
-    {col: 'precio', wid:'1/5'},
-    {col: 'cantidad', wid:'1/5'},
+    {col: 'trade', wid:'1/6'},
+    {col: 'name', wid:'1/6'},
+    {col: 'symbol', wid:'1/6'},
+    {col: 'precio', wid:'1/6'},
+    {col: 'cantidad', wid:'1/6'},
+    {col: 'fecha', wid:'1/6'}
     
 ];
 export default ()=>{
