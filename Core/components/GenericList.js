@@ -37,8 +37,19 @@ function GenericList({title, lineOnClick, state_show_form, state_list = [], fiel
                 {lista_ordenada[0].map((line,index)=>
                     (<div className='w-full flex bg-slate-50 py-1' key={index}>
                         <div className='w-10/12 py-1 flex' onClick={()=>{if(lineOnClick)lineOnClick({line,index})}}>
-                            {fields_display.map((field,index)=>
-                                (<span className={"px-2 w-"+field.wid} key={index}>{field.mask ? field.mask(line[field.col]) : line[field.col]}</span>)
+                            
+                            {fields_display.map((field,index)=>{
+                                if(field.col.indexOf('.')<0)
+                                    return <span className={"px-2 w-"+field.wid} key={index}>{field.mask ? field.mask(line[field.col]) : line[field.col]}</span>
+                                else{
+                                    let new_col = field.col.split('.');
+                                    let new_value = line;
+                                    for(let y =0;y<new_col.length;y++){
+                                        new_value = new_value[new_col[y]];
+                                    }
+                                    return <span className={"px-2 w-"+field.wid} key={index}>{field.mask ? field.mask(new_value) : new_value}</span>;
+                                }
+                            }
                             )}
                         </div>
                         <div className="w-1/12 px-1 ">
