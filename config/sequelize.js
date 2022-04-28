@@ -19,6 +19,8 @@ async function cargar_schemes(){
     schemes.push((await import("../modulos/trading/schemes/Coin")).default);
     schemes.push((await import("../modulos/trading/schemes/TypeCoin")).default);
     schemes.push((await import("../modulos/trading/schemes/Trade")).default);
+    schemes.push((await import("../modulos/trading/schemes/TradeDetail")).default);
+    schemes.push((await import("../modulos/trading/schemes/Exchange")).default);
     return schemes;
 }
 

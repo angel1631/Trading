@@ -1,25 +1,61 @@
 
 import {useEffect, useState} from 'react';
+import Almacen from './Almacen';
 export default ()=>{
     let almacenes = useState([]);
-    useEffect(async()=>{
-        const url = '/api/almacenes';
-        let res_api = await fetch(`${url}`);
-        res_api = await res_api.json();
-        almacenes[1](res_api);
-    },[])
+    let recargar = useState(false);
+    
+    async function actualizar_almacenes(){
+        try{
+            let out = [];
+            let res_api_almacenes = await fetch(`/api/almacenes`);
+            if(res_api_almacenes.status!=200) throw respuesta;
+            let almacenes_api = (await res_api_almacenes.json()).data;
+            for(let x = 0; x<almacenes_api.length;x++){
+                let almacen = almacenes_api[x];
+                if(almacen.type_coin=='otra'){
+                    let price_api = await fetch(`https://api3.binance.com/api/v3/ticker/price?symbol=${(almacen.symbol).toUpperCase()}USDT`);
+                    let price = (await price_api.json()).price;
+                    almacen.price = parseFloat(price);
+                    almacen.future_USD = almacen.acumulado*almacen.price;
+                    almacen.future_margin = almacen.margen+((almacen.future_USD-almacen.invertido)/almacen.invertido);
+                    almacen.future_result = (almacen.future_USD-parseFloat(almacen.invertido))+almacen.margen_USD
+                }else{
+                    almacen.price = 1;
+                    almacen.future_USD = 0;
+                    almacen.future_margin = 0;
+                    almacen.future_result = parseFloat(almacen.invertido)
+                }
+                
+            }
+            
+            almacenes[1](almacenes_api);
+            return out;
+        }catch(error){
+            console.log(error);
+            //alert("Error con la api");
+        }
+        
+    }
+    useEffect(()=>{
+        actualizar_almacenes();
+    },[]);
+    useEffect(()=>{
+        if(recargar[0]){
+            actualizar_almacenes();
+            recargar[1](false);
+        }
+    },[recargar[0]])
     return (
-        <div className='w-full contenedor_almacen'>
-            {almacenes[0].map((item)=>{
-                return(
-                    <div className=' w-1/3'>
-                        <div className=' text-center text-4xl'>item.symbol</div>
-                        <div className=''>{item.total}</div>
-                        <div className=''>Promedio Compra $ {item.valor}</div>
-                    </div>
-                )
+        
+        <div>
+            <div onClick={()=>{recargar[1](true)}}>Recargar</div>
+        <div className='w-full contenedor_almacen flex flex-row space-x-2'>
+            {almacenes[0].map((item,index)=>{
+                return( <Almacen almacen = {item} key={index}/>) 
             })}
         </div>
+        </div>
             
-            );
+    );
 }

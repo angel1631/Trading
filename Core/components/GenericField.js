@@ -1,6 +1,6 @@
 function GenericField({field, state, onChange}){
     return(
-        <div className="opcion w-full flex flex-col">
+        <div className="opcion w-full flex flex-col" style={field.invisible && {display: "none"}} >
             <label className="w-full pt-3 pb-1 pl-1">{field.description}</label>
             {field.type=='switch' ?
                 <div className="form-check form-switch pl-1 py-2 flex ">
@@ -18,7 +18,6 @@ function GenericField({field, state, onChange}){
             :
                 (field.type=='decimal' || field.type=='moneda') ?
                 <input className="w-full rounded-lg shadow-md p-2 mb-2" placeholder={field.description} 
-                    style={field.invisible && {display: "none"}} 
                     type="number" value={state} 
                     disabled={field.disabled}
                     onBlur={(e)=>{
@@ -29,7 +28,6 @@ function GenericField({field, state, onChange}){
                     
             :
                 <input className="w-full rounded-lg shadow-md p-2 mb-2" placeholder={field.description} 
-                    style={field.invisible && {display: "none"}} 
                     type={field.type} value={state} 
                     onBlur={(e)=>{
                         if(field.onBlur)
