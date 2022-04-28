@@ -35,7 +35,6 @@ export default ()=>{
     useEffect(()=>{
         refresh_list();
     },[]);
-
     useEffect(()=>{
         let b_form_state={...form_state[0]};
         b_form_state.cantidad_compra = (parseFloat(b_form_state.cantidad_venta) * parseFloat(b_form_state.precio_venta)) / parseFloat(b_form_state.precio_compra ) || 0;
