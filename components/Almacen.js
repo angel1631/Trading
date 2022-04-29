@@ -10,11 +10,11 @@ export default ({almacen})=>{
                 <div className={`${bg_historico}  py-2 rounded-md`}>
                     <div className='py-2 font-bold'> {symbol.toUpperCase()} {acumulado}</div>
                     <div className='grid grid-cols-2'>
-                        <div>He invertido:</div><div> {format_currency({val:(invertido).toFixed(2)})}</div>
                         <div>Precio actual:</div><div> {format_currency({val:(price).toFixed(2)})}</div>    
-                        <div>Valor</div><div>$. {format_currency({val:(valor).toFixed(2)})}</div>
-                        <div>Margen</div><div>{(margen*100).toFixed(2)}%</div>
-                        <div>Resultado</div><div> $. {(margen_USD).toFixed(2)}</div>
+                        <div>He invertido:</div><div> {format_currency({val:(invertido).toFixed(2)})}</div>
+                        <div>Precio AVG:</div><div>$. {format_currency({val:(valor).toFixed(2)})}</div>
+                        <div>Margen:</div><div>{(margen*100).toFixed(2)}%</div>
+                        <div>Resultado:</div><div> $. {(margen_USD).toFixed(2)}</div>
                     </div>
                 </div>
                 <div className='text-left pl-2 font-bold mt-2'>Si liquido</div>
