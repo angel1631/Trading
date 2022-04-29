@@ -4,7 +4,7 @@ export default ({almacen})=>{
     let bg_historico = margen>0 ? "bg-green-400" : margen==0 ? "bg-blue-400": "bg-red-400";
     let bg_futuro = future_margin>0 ? "bg-green-400" : future_margin==0 ? "bg-blue-400": "bg-red-400";
     return(
-        <div className={`text-center py-2 px-4 shadow-xl rounded-lg `} >
+        <div className={`text-center py-2 px-4 shadow-xl rounded-lg bg-white`} >
             <div className='text-4xl py-4'>{name}</div>
             <div className=' px-3 py-2 '>
                 <div className={`${bg_historico}  py-2 rounded-md`}>
