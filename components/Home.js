@@ -48,7 +48,7 @@ export default ()=>{
     }
     useEffect(()=>{
         actualizar_almacenes();
-        setInterval(actualizar_almacenes, 30000);
+        setInterval(actualizar_almacenes, 60000);
     },[]);
     useEffect(()=>{
         if(recargar[0]){
