@@ -1,12 +1,15 @@
 
 import {useEffect, useState} from 'react';
 import Almacen from './Almacen';
+import {HiRefresh} from 'react-icons/hi';
 export default ()=>{
     let almacenes = useState([]);
     let recargar = useState(false);
+    let loading = useState(false);
     
     async function actualizar_almacenes(){
         try{
+            loading[1](true);
             let out = [];
             let res_api_almacenes = await fetch(`/api/almacenes`);
             if(res_api_almacenes.status!=200) throw respuesta;
@@ -35,6 +38,7 @@ export default ()=>{
                 return 0;
             });
             almacenes[1](almacenes_api);
+            loading[1](false);
             return out;
         }catch(error){
             console.log(error);
@@ -44,22 +48,34 @@ export default ()=>{
     }
     useEffect(()=>{
         actualizar_almacenes();
+        setInterval(actualizar_almacenes, 30000);
     },[]);
     useEffect(()=>{
         if(recargar[0]){
             actualizar_almacenes();
             recargar[1](false);
         }
-    },[recargar[0]])
+    },[recargar[0]]);
+    
     return (
         
         <div>
-            <div onClick={()=>{recargar[1](true)}}>Recargar</div>
-            <div className='w-full contenedor_almacen grid grid-cols-1 gap-1 md:grid-cols-3 lg:grid-cols-6'>
-            {almacenes[0].map((item,index)=>{
-                return( <Almacen almacen = {item} key={index}/>) 
-            })}
-        </div>
+            <div className='w-full' onClick={()=>{recargar[1](true)}}>
+                <div className=' mt-2  mr-2 float-right  bg-green-400 text-gray-100 font-bold px-4 flex py-2 rounded-md cursor-pointer hover:bg-green-300'>
+                    <div>Recargar </div>
+                    <div className='ml-3 mt-1 text-lg'>< HiRefresh /></div> 
+                </div>
+            </div>
+            {loading[0] ? 
+                <img src={'/media/loading.gif'} />
+                :
+                <div className='w-full contenedor_almacen grid grid-cols-1 gap-1 md:grid-cols-3 lg:grid-cols-6'>
+                    {almacenes[0].map((item,index)=>{
+                        return( <Almacen almacen = {item} key={index}/>) 
+                    })}
+                </div>    
+            }
+            
         </div>
             
     );
