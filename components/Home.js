@@ -50,7 +50,7 @@ export default ()=>{
         
         <div>
             <div onClick={()=>{recargar[1](true)}}>Recargar</div>
-        <div className='w-full contenedor_almacen flex flex-row space-x-2'>
+            <div className='w-full contenedor_almacen grid grid-cols-1 gap-1 md:grid-cols-3 lg:grid-cols-6'>
             {almacenes[0].map((item,index)=>{
                 return( <Almacen almacen = {item} key={index}/>) 
             })}
