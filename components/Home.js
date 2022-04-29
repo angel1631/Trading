@@ -30,8 +30,8 @@ export default ()=>{
             }
             almacenes_api.sort((a,b)=>{
                 
-                if(a.type_coin>b.type_coin) return 1;
-                if(a.type_coin<b.type_coin) return -1;
+                if(a.type_coin<b.type_coin) return 1;
+                if(a.type_coin>b.type_coin) return -1;
                 return 0;
             });
             almacenes[1](almacenes_api);
