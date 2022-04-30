@@ -1,6 +1,6 @@
 import { format_currency } from '../Core/functions/number';
-export default ({almacen})=>{
-    let {symbol,acumulado, invertido, valor, margen, margen_USD, name, price, future_USD, future_margin, future_result} = almacen;
+export default ({almacen, onClick})=>{
+    let {symbol,acumulado, invertido, valor, margen, margen_USD, name, price, future_USD, future_margin, future_result,CoinId} = almacen;
     let bg_historico = margen>0 ? "bg-green-400" : margen==0 ? "bg-blue-400": "bg-red-400";
     let bg_futuro = future_margin>0 ? "bg-green-400" : future_margin==0 ? "bg-blue-400": "bg-red-400";
     return(
@@ -23,6 +23,7 @@ export default ({almacen})=>{
                     <div>recibiria:</div><div> {format_currency({val:(future_USD).toFixed(2)})}</div>
                     <div>Resultado: </div><div>$ {format_currency({val:(future_result).toFixed(2)})}</div>
                 </div>
+                <div onClick={()=>{onClick(CoinId)}}>Ver Trades</div>
             </div>
             
             

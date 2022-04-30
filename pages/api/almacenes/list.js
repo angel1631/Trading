@@ -1,4 +1,4 @@
-import ORM from '../../config/sequelize';
+import ORM from '../../../config/sequelize';
 
 export default async function handler(req,res){
     
@@ -6,7 +6,7 @@ export default async function handler(req,res){
         let orm = await ORM();
     
         let [resultado, metadata] = await orm.query(`
-            SELECT t.id, c.symbol, c.name, td.precio, td.cantidad, tp.clave type_coin
+            SELECT t.id, c.id CoinId, c.symbol, c.name, td.precio, td.cantidad, tp.clave type_coin
             FROM Trade t
             JOIN TradeDetail td ON td.TradeId = t.id
             JOIN Coin c ON td.CoinId = c.id
@@ -21,6 +21,7 @@ export default async function handler(req,res){
                     type_coin: trade.type_coin,
                     symbol: trade.symbol, 
                     name: trade.name,
+                    CoinId: trade.CoinId,
                     acumulado: parseFloat(trade.cantidad),
                     invertido: parseFloat(trade.cantidad)*parseFloat(trade.precio),
                     valor:parseFloat(trade.precio),
