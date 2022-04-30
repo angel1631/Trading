@@ -5,7 +5,7 @@ export default async function detalle(req,res){
         let orm = await ORM();
     
         let [resultado, metadata] = await orm.query(`
-            SELECT t.id, c.symbol, c.name, td.precio, td.cantidad
+            SELECT t.id, c.symbol, c.name, td.precio, td.cantidad, t.fecha
             FROM Trade t
             JOIN TradeDetail td ON td.TradeId = t.id
             JOIN Coin c ON td.CoinId = c.id
@@ -17,6 +17,7 @@ export default async function detalle(req,res){
             let mov = {
                 trade: trade.id,
                 symbol: trade.symbol,
+                fecha: trade.fecha,
                 precio: parseFloat(trade.precio),
                 cantidad: parseFloat(trade.cantidad),
                 margen_trade:0,
